@@ -1,0 +1,107 @@
+:root {
+    font-size: calc( 3vw);
+    --color1: #252422;
+    --color2: #403d39;
+    --color3: #EB5E28;
+    --color4: #219897;
+    --color5: #CCC5B9;
+  }
+
+body{
+    background-color: var(--color1);
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+.header{
+    color: var(--color5);
+    grid-area: 1/1/2/4;
+    font-size: 2rem;
+    text-align: center;
+    margin: auto;
+    font-family: 'Permanent Marker', cursive;
+}
+
+.middle{
+    grid-area: 2/2/2/3;
+    display: flex;
+    border: solid 6px var(--color2) ;
+    border-radius: 20px;
+    box-shadow: 0 0 40px var(--color2);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background-color: var(--color1);
+    padding: 3%;
+    gap: 10px;
+}
+
+.middle div {
+  flex-basis: calc(50% - 5px);
+  flex-wrap: wrap;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  /* justify-content: center;  */
+  align-items: center;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.5rem;
+}
+
+.middle .x, .middle .computer{
+    background-color: var(--color3);
+    color: var(--color1);
+}
+
+.middle .o, .middle .player{
+   color: var(--color3);
+}
+
+
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
