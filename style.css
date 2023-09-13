@@ -1,10 +1,11 @@
 :root {
     font-size: calc( 3vw);
-    --color1: #252422;
-    --color2: #403d39;
-    --color3: #EB5E28;
-    --color4: #219897;
-    --color5: #CCC5B9;
+    --color1: #2A2B2E;
+    --color2: #222b30;
+    --color3: #87FF65;
+    /* --color4: #f3de2c; */
+    --color4: #e4ff1a;
+    --color5: #A4C2A8;
   }
 
 body{
@@ -17,49 +18,78 @@ body{
 }
 
 .header{
-    color: var(--color5);
+    color: var(--color4);
     grid-area: 1/1/2/4;
-    font-size: 2rem;
+    font-size: 1.3rem;
     text-align: center;
     margin: auto;
-    font-family: 'Permanent Marker', cursive;
+    font-family: 'Righteous', cursive;
+    text-transform: uppercase;
 }
 
 .middle{
     grid-area: 2/2/2/3;
     display: flex;
+    flex-direction: column;
     border: solid 6px var(--color2) ;
-    border-radius: 20px;
-    box-shadow: 0 0 40px var(--color2);
-    flex-direction: row;
-    flex-wrap: wrap;
+    border-radius: 5px;
+    box-shadow: 0 0 40px black;
     justify-content: space-evenly;
-    background-color: var(--color1);
-    padding: 3%;
+    background-color: var(--color2);
+    padding: 20px 50px;
     gap: 10px;
 }
 
-.middle div {
-  flex-basis: calc(50% - 5px);
-  flex-wrap: wrap;
-  border-radius: 20px;
+.middle div{
   display: flex;
-  justify-content: space-evenly;
-  /* justify-content: center;  */
+  flex-basis: calc(50% - 5px);
+  border-radius: 5px;
+  justify-content: space-around;
   align-items: center;
-  font-family: 'Permanent Marker', cursive;
-  font-size: 1.5rem;
+  font-family: 'Righteous', cursive;
+  font-size: 1.3rem;
+  background-color: var(--color1);
 }
 
-.middle .x, .middle .computer{
+.middle>div{
+    box-shadow: 0 0 5px black;
+    padding: 10px 20px;
+}
+
+.middle h1{
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.5rem;
+    color: var(--color5);
+    font-family: 'ADLaM Display', cursive;
+    margin-top: 20px;
+}
+
+.middle .sign .x, .middle .enemy .computer{
     background-color: var(--color3);
     color: var(--color1);
 }
 
-.middle .o, .middle .player{
+.middle .sign .o, .middle .enemy .player{
    color: var(--color3);
 }
 
+
+.buttom{
+    grid-area: 3/1/3/4;
+    margin: 40px auto 10px auto ;
+    text-align: center;
+}
+
+.buttom button{
+    width: 20vw;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: 'ADLaM Display', cursive;
+    font-size: 0.5rem;
+    background-color: var(--color4);
+    text-transform: uppercase;
+}
 
 
 html, body, div, span, applet, object, iframe,
