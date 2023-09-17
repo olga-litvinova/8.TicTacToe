@@ -12,26 +12,86 @@
      <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&family=Anton&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="header">
-        <H1>Tic Tac Toe</H1>
-    </div>
-
-    <div class="middle">
-        <h1>Pick your sign:</h1>
-        <div class="sign">
-            <div class="x">X</div>
-            <div class="o">O</div>
+    <section class="menu">
+        <div class="header">
+            <H1>Tic Tac Toe</H1>
         </div>
-        <h1>Pick your enemy:</h1>
-        <div class="enemy">
-            <div class="computer">Robot</div>
-            <div class="player">Human</div>
+    
+        <div class="middle">
+            <h1 class="pickSign">Pick your sign:</h1>
+            <div class="sign">
+                <div class="x">X</div>
+                <div class="o">O</div>
+            </div>
+            <h1 class="pickEnemy">Pick your enemy:</h1>
+            <div class="enemy">
+                <div class="robot">Robot</div>
+                <div class="human">Human</div>
+            </div>
         </div>
-    </div>
+    
+        <div class="buttom"> 
+           <button>Start Game</button>
+        </div>
+    </section>
 
-    <div class="buttom"> 
-       <button>Start Game</button>
-    </div>
+    <section class="game" >
+        <div class="header">
+            <div class="logo"><h1>Tic Tac Toe</h1></div>
+            <div class="turn"></div>
+            <div class="return"><img src="image/icon-restart.svg" alt="Restart btn"></div>
+        </div>
+    
+        <div class="board">
+            <div class="game-board__field" data-index="0" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+            <div class="game-board__field" data-index="1" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+            <div class="game-board__field" data-index="2" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+            <div class="game-board__field" data-index="3" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+            <div class="game-board__field" data-index="4" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+            <div class="game-board__field" data-index="5" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+            <div class="game-board__field" data-index="6" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+            <div class="game-board__field" data-index="7" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+            <div class="game-board__field" data-index="8" role="button">
+                <div class="game-board__state" data-field-state='' data-field-turn=""></div>
+            </div>
+        </div>
+    
+        <div class="buttom"> 
+            <div class="main__summary first">
+                <p class="main__display-name">Player X</p>
+                <h2 class="main__score-displayer">0</h2>
+            </div>
+            <div class="main__summary second">
+                <p class="main__display-name">Ties</p>
+                <h2 class="main__score-displayer">0</h2>
+            </div>
+            <div class="main__summary third">
+                <p class="main__display-name">Player O</p>
+                <h2 class="main__score-displayer">0</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- <section class="result">
+
+    </section> -->
+    
  
     <script src="event.js"></script> 
 </body>
