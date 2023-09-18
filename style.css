@@ -10,11 +10,11 @@
 /* Section 1 - Menu */
 
 .menu{
-    display: none;
+    /* display: none; */
     background-color: var(--color1);
     width: 100vw;
     height: 100vh;
-    /* display: grid; */
+    display: grid;
     grid-template-rows: 1fr 2fr 1fr;
     grid-template-columns: 1fr 2fr 1fr;
 }
@@ -75,7 +75,7 @@
 }
 
 
-.main .buttom{
+.buttom{
     grid-area: 3/1/4/4;
     margin: 30px auto 10px auto ;
     text-align: center;
@@ -94,11 +94,11 @@
 /* Section 2 - Game*/
 
 .game{
-    /* display: none; */
+    display: none;
     background-color: var(--color1);
     width: 100vw;
     height: 100vh;
-    display: grid;
+    /* display: grid; */
     grid-template-rows: 1fr 2fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     text-transform: uppercase;
@@ -178,7 +178,7 @@
     font-family: 'Righteous', cursive;
 }
 
-.game .buttom .main__summary{
+.game .buttom .summary{
     font-size: 0.6rem;
     margin-top: 40px;
     width: 10vw;
@@ -186,22 +186,22 @@
     text-align: center;
     padding: 5px 0;
 }
-.game .buttom .main__summary p{
+.game .buttom .summary p{
     font-size: 0.3rem;
 }
 
-.game .main__summary.first{
+.game .summary.first{
     background-color: var(--color4);
     margin: auto 0;
 }
 
-.game .main__summary.second{
+.game .summary.second{
     background-color: var(--color5);
     margin: auto 0;
     }
 
 
-.game .main__summary.third{
+.game .summary.third{
     background-color: var(--color3);
     margin: auto 0;
     }
