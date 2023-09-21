@@ -1,4 +1,3 @@
-
 // Game starts with a menu section, where player can choose the sign(x or o) and the enemy(human or robot)
 // following piece of code creates a Toggle Switch functianality(on/off button) both for defining the sign and enemy
 
@@ -10,11 +9,14 @@ const human=document.querySelector('.human');
 const pickEnemy=document.querySelector('.pickEnemy');
 let color1="#2A2B2E";
 let color3="#87FF65";
+let color4="#e4ff1a";
+let color5= "#A4C2A8";
 let isX = true; 
 let isRobot=true;
 let playerSign="X";
 let enemySign="O";
 let playerEnemy="Robot"
+
 function createToggleFunction(element1,element2, color1, color2, labelText, toggleValue, variableToUpdate ){
     return function(){  
         toggleValue = !toggleValue;
@@ -50,114 +52,246 @@ function createToggleFunction(element1,element2, color1, color2, labelText, togg
 
 const toggleSign = createToggleFunction(x, o, color1, color3, pickSign, isX, 'sign');
 const toggleEnemy = createToggleFunction(robot, human, color1, color3, pickEnemy, isRobot, 'enemy');
-
 x.addEventListener('click', toggleSign);
 o.addEventListener('click', toggleSign);
 robot.addEventListener('click', toggleEnemy);
 human.addEventListener('click', toggleEnemy);
 
-
 // After defining the sign and enemy, we are ready to start our game :)
 // With a click of a start button our board game shows off.
 // Technically one section "menu" displayes as none and next section "game" turns on 
 
+const menu_section=document.querySelector('.menu');
+const game_section=document.querySelector('.game');
 const start=document.querySelector('.buttom');
+const turn=document.querySelector('.turn');
+const result=document.querySelector('.result');
+const winner=document.querySelector('.winner');
+const scoreX=document.querySelector ('.score-displayer-X')
+const scoreO=document.querySelector ('.score-displayer-O')
+const scoreTie=document.querySelector ('.score-displayer-tie')
+const menu=document.querySelectorAll('.return');
+const play=document.querySelector('.play');
+
+
 function startGame(){
-    const menu_section=document.querySelector('.menu');
-    const game_section=document.querySelector('.game');
-    const turn=document.querySelector('.turn');
     menu_section.style.display = "none";
-    game_section.style.display ="grid"
-    if(playerSign=="O"){turn.innerHTML="Turn: O";}
-    else if(playerSign=="X") {turn.innerHTML="Turn: X";}
+    game_section.style.display ="grid";
+    reset();
+    // turn.innerHTML="Turn: "+ players[0].sign;
+    // if(playerSign=="O"){turn.innerHTML="Turn: X";}
+    // else if(playerSign=="X") {turn.innerHTML="Turn: X";}
 }
 start.addEventListener('click', startGame);
 
+menu.forEach(menu => {
+    menu.addEventListener('click', () =>{
+        menu_section.style.display = "grid";
+        game_section.style.display ="none";
+        result.style.display="none";
+        game_section.style.filter="blur(0px)";
+        reset();
+    })
+  });
 
+play.addEventListener('click', () =>{
+    result.style.display="none";
+    game_section.style.filter="blur(0px)";
+    reset();
+})
 
-// function GameController(PlayerX="Player X",PlayerO="Player O"){
-    let players= [
-        {
-            name:"PlayerX",
-            sign: "X",
-            score:0,
-            position:[
-                "", "", "",
-                "","","", 
-                "","", ""]
-        },
-        {
-            name: "PlayerO",
-            sign: "O",
-            score: 0,
-            position:[
-                "", "", "",
-                "","","", 
-                "","", ""]   
+let players= [
+    {
+        name:"Player X",
+        sign: "X",
+        score: 0,
+        position:[],
+        winner: false,
+        color: color4,
+        round:1   
+    },
+    {
+        name: "Player O",
+        sign: "O",
+        score: 0,
+        position:[],
+        winner: false,
+        color: color3,
+        round:1      
+    }
+];
+
+let activePlayer=players[0];
+let tie=0;
+
+const board=document.querySelectorAll('.board_field');
+var board_array = [...board];
+let area = [
+    "", "", "",
+    "","","", 
+    "","", ""
+];
+
+board_array.forEach((div,index) => {
+    div.addEventListener('mousemove', () =>{
+        if (area[index] == "" && activePlayer.winner==false) {
+            div.innerHTML=activePlayer.sign;
+            div.style.color=color1;
+            div.style.webkitTextStrokeColor=activePlayer.color;
+            div.style.border = `solid 1px ${activePlayer.color}`;
+            // -webkit-text-stroke-color=activePlayer.color;
         }
+    });
+    div.addEventListener('mouseleave', () =>{
+        if (area[index] == "" && activePlayer.winner==false) {
+            div.innerHTML='';
+            div.style.border = `solid 1px ${color5}`;
+        }
+    });
+    div.addEventListener('click', () =>{
+        if (area[index] == "" && activePlayer.winner==false) {
+            div.innerHTML=activePlayer.sign;
+            div.style.color=activePlayer.color;
+            div.style.border = `solid 1px ${color5}`;
+            div.style.trans
+            activePlayer.position.push(index);
+            activePlayer.position.sort();
+            area[index] = activePlayer.sign;  
+            checkRoundwinner();
+            announceFinalwinner();
+            switchPlayerTurn();  
+            turnSign();
+        }
+    });
+});
+
+const switchPlayerTurn = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+};
+
+
+let combo=[];
+
+function checkRoundwinner(){
+    const winningCombinations = [
+        [0, 1, 2], // 012
+        [3, 4, 5], // 345
+        [6, 7, 8], // 678
+        [0, 3, 6], // 036
+        [1, 4, 7], // 147
+        [2, 5, 8], // 258
+        [0, 4, 8], // 048
+        [2, 4, 6]  // 246
     ];
+    let isSubset = (array1, array2) =>
+    array2.every((element) => array1.includes(element));
 
-    let activePlayer=players[0];
+    let index=0;
+    for (let i= 0; i < winningCombinations.length;i++) 
+    {
+        if(isSubset(activePlayer.position, winningCombinations[index])==false){
+            index++;
+        }
+        else if (isSubset(activePlayer.position, winningCombinations[index])==true) {
+            combo=winningCombinations[index];
+            activePlayer.score++; 
+            if(activePlayer.score==5){
+                announceFinalwinner()
+            }
+            else{
+                activePlayer=players[0];
+                changeScore()
+                resetBoard()
+                switchPlayerTurn();  
+            }
+            return combo;   
+        } 
+        else if (isSubset(activePlayer.position, winningCombinations[index])==false && area.includes("")==false){
+            tie++;
+            changeScore();
+            activePlayer=players[0];
+            resetBoard();
+            switchPlayerTurn(); 
+        }
+    } ;
+};
 
-    const board=document.querySelectorAll('.board_field');
-    var board_array = [...board];
-    let area = [
+function announceFinalwinner(){  
+    if(activePlayer.score==3 ){
+        for (const index of combo) {
+            board_array[index].style.backgroundColor = activePlayer.color;
+            board_array[index].style.color = color1;
+        }               
+        game_section.style.filter="blur(4px)";
+        result.style.display="flex";
+
+        if(activePlayer.sign==playerSign){
+            winner.innerHTML="You are a winner";
+            activePlayer.score++;
+        }
+        else if(activePlayer.sign !== playerSign){
+            winner.innerHTML="You lost";
+            activePlayer.score++;
+        }
+    }
+}
+    
+function turnSign(){
+    turn.innerHTML='Turn: '+ activePlayer.sign;
+}
+
+function changeScore(){
+    scoreTie.innerHTML=tie;
+    scoreX.innerHTML=players[0].score;
+    scoreO.innerHTML=players[1].score;
+}
+changeScore()
+    
+function reset(){
+    board_array.forEach((div, index) => {
+        div.innerHTML = ''; 
+        board_array[index].style.backgroundColor =color1;
+        });
+
+    area = [
         "", "", "",
         "","","", 
         "","", ""
     ];
 
-    board_array.forEach((div,index) => {
-        div.addEventListener('mousemove', () =>{
-            if (area[index] == "") {
-                div.innerHTML=activePlayer.sign;
-            }
+    players.forEach((player) => {
+        player.position = [];
+        player.winner = false;
+        player.score = 0;
         });
-        div.addEventListener('mouseleave', () =>{
-            if (area[index] == "") {
-                div.innerHTML='';
-            }
+    
+    activePlayer=players[0];
+    turnSign();
+    changeScore();
+}
+
+
+function resetBoard(){
+    activePlayer=players[0];
+    board_array.forEach((div, index) => {
+        div.innerHTML = ''; 
+        board_array[index].style.backgroundColor =color1;
         });
-        div.addEventListener('click', () =>{
-            if (area[index] == "") {
-                div.innerHTML=activePlayer.sign;
-                getActivePlayer();
-                activePlayer.position[index]=activePlayer.sign;
-                area[index] = activePlayer.sign;
-                switchPlayerTurn();
-            }
-        });
+
+    area = [
+        "", "", "",
+        "","","", 
+        "","", ""
+    ];
+    players.forEach((player) => {
+        player.position = [];
     });
-   
-
-    const switchPlayerTurn = () => {
-        activePlayer = activePlayer === players[0] ? players[1] : players[0];
-    };
-    
-    
-    const checkWinner= () => {
-        area.forEach((index) => {
-
-        }
-    )};
-
-// }
-
-// GameController()
-
-
-//Game
+    activePlayer=players[0];
+}
 
 
 
-// 012
-// 345
-// 678
-// 036
-// 147
-// 258
-// 048
-// 246
+
 
 
 

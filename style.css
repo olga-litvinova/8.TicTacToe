@@ -7,14 +7,19 @@
     --color5: #A4C2A8;
   }
 
+*{
+    text-transform: uppercase;
+}
+
 /* Section 1 - Menu */
 
+
 .menu{
-    /* display: none; */
+    display: none;
     background-color: var(--color1);
     width: 100vw;
     height: 100vh;
-    display: grid;
+    /* display: grid; */
     grid-template-rows: 1fr 2fr 1fr;
     grid-template-columns: 1fr 2fr 1fr;
 }
@@ -26,7 +31,6 @@
     text-align: center;
     margin-top: 70px;
     font-family: 'Righteous', cursive;
-    text-transform: uppercase;
 }
 
 .middle{
@@ -38,14 +42,14 @@
 }
 
 .middle div{
-  display: flex;
-  flex-basis: calc(50% - 5px);
-  border-radius: 5px;
-  justify-content: space-around;
-  align-items: center;
-  font-family: 'Righteous', cursive;
-  font-size: 0.9rem;
-  background-color: var(--color1);
+    display: flex;
+    flex-basis: calc(50% - 5px);
+    border-radius: 5px;
+    justify-content: space-around;
+    align-items: center;
+    font-family: 'Righteous', cursive;
+    font-size: 0.9rem;
+    background-color: var(--color1);
 }
 
 .middle>div{
@@ -55,7 +59,6 @@
 
 .middle h1{
     text-align: left;
-    text-transform: uppercase;
     font-size: 0.5rem;
     color: var(--color5);
     font-family: 'ADLaM Display', cursive;
@@ -71,7 +74,7 @@
 
 .middle .sign .o, .middle .enemy .human{
     height: 80%;
-   color: var(--color3);
+    color: var(--color3);
 }
 
 
@@ -88,22 +91,23 @@
     font-family: 'ADLaM Display', cursive;
     font-size: 0.4rem;
     background-color: var(--color4);
-    text-transform: uppercase;
 }
 
 /* Section 2 - Game*/
 
 .game{
-    display: none;
+    /* display: none; */
     background-color: var(--color1);
     width: 100vw;
     height: 100vh;
-    /* display: grid; */
+    display: grid;
     grid-template-rows: 1fr 2fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
-    text-transform: uppercase;
     box-sizing: border-box;
     padding: 0 15vw;
+
+    position: relative;
+     
 }
 
 .game .header{
@@ -162,9 +166,7 @@
     align-items: center;
     justify-content: center;
 
-    -webkit-text-stroke-color: var(--color3);
     -webkit-text-stroke-width: 2px;
-    color: var(--color1);
     font-size: 2rem;
     font-family: 'Righteous', cursive;
 }
@@ -205,6 +207,74 @@
     background-color: var(--color3);
     margin: auto 0;
     }
+
+.result{
+    display: none;
+    position: absolute;
+    top:30vh;
+    right: 30vw;
+    left: 30vw;
+    bottom: 30vh;
+    background-color: var(--color1);
+    color: var(--color5);
+    box-shadow: 0 0 5px black;
+    border-radius: 5px;
+    border: solid 1px var(--color5);
+    text-align: center;
+    font-family: 'ADLaM Display', cursive;
+    box-sizing: border-box;
+    /* display: flex; */
+    flex-direction: column;
+    flex: 1;
+}
+
+.result h1{
+    flex-grow: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin: 10% 5%; */
+}
+
+.result .button{
+    flex-grow: 1;
+    position: relative;
+    /* margin-top: 20%; */
+    display: flex;
+    gap: 10px;
+    font-size: 0.6rem;
+    justify-content: space-around;
+}
+
+.result .button>div{
+    text-align: center;
+    height: 10vh;
+    width: 15vw;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition-delay: 40s;
+}
+
+
+.result .button .play{
+    background-color: var(--color3);
+    color: var(--color1);
+}
+
+.result .button .return{
+    background-color: var(--color5);
+    color: var(--color1);
+}
+
+
+
+
+
+
+
+
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
