@@ -193,27 +193,37 @@ function checkRoundwinner(){
             index++;
         }
         else if (isSubset(activePlayer.position, winningCombinations[index])==true) {
+            
             combo=winningCombinations[index];
+            for (const index of combo) {
+                board_array[index].style.backgroundColor = activePlayer.color;
+                board_array[index].style.color = color1;
+            }             
             activePlayer.score++; 
-            if(activePlayer.score==5){
+           
+            if(activePlayer.score==3){
                 announceFinalwinner()
             }
             else{
-                activePlayer=players[0];
-                changeScore()
-                resetBoard()
-                switchPlayerTurn();  
+                setTimeout(() => {
+                    activePlayer=players[0];
+                    turnSign();
+                    changeScore();
+                    resetBoard();
+                    
+                }, 1000);
+                  
             }
             return combo;   
-        } 
-        else if (isSubset(activePlayer.position, winningCombinations[index])==false && area.includes("")==false){
-            tie++;
-            changeScore();
-            activePlayer=players[0];
-            resetBoard();
-            switchPlayerTurn(); 
-        }
+        }  
     } ;
+    if (area.indexOf("") === -1) {
+        tie++;
+        activePlayer=players[0];
+        changeScore();
+        resetBoard();
+        switchPlayerTurn();  
+    }
 };
 
 function announceFinalwinner(){  
@@ -234,6 +244,7 @@ function announceFinalwinner(){
             activePlayer.score++;
         }
     }
+
 }
     
 function turnSign(){
@@ -264,7 +275,7 @@ function reset(){
         player.winner = false;
         player.score = 0;
         });
-    
+    tie=0;
     activePlayer=players[0];
     turnSign();
     changeScore();
