@@ -280,7 +280,9 @@ const gameController = (() => {
             board.boardStyleNotHover(element, index);
         });
         element.addEventListener('click', () => {
-            if(!isAiMode && clickEnabled[index]){
+            if(
+                // !isAiMode && 
+                clickEnabled[index]){
                 clickEnabled[index] = false;
                 board.boardStyleClicked(element, index);
                 checkRoundwinner();
