@@ -1,309 +1,305 @@
+function querySelector(class_name){
+   return document.querySelector(class_name)
+}
+function querySelectorAll(class_name){
+    return document.querySelectorAll(class_name)
+ }
+ let black = "#2A2B2E",
+     green = "#87FF65",
+     yellow= "#e4ff1a",
+     isAiMode = false;
+
 // Game starts with a menu section, where player can choose the sign(x or o) and the enemy(human or robot)
 // following piece of code creates a Toggle Switch functianality(on/off button) both for defining the sign and enemy
+(function SwitchToggle() {
+    // Select Sign
+    const x = document.querySelector('.x'),o = document.querySelector('.o');
+    // Select Enemy
+    const robot = document.querySelector('.robot'),human = document.querySelector('.human');
 
-const x=document.querySelector('.x');
-const o=document.querySelector('.o');
-const pickSign=document.querySelector('.pickSign');
-const robot=document.querySelector('.robot');
-const human=document.querySelector('.human');
-const pickEnemy=document.querySelector('.pickEnemy');
-let color1="#2A2B2E";
-let color3="#87FF65";
-let color4="#e4ff1a";
-let color5= "#A4C2A8";
-let isX = true; 
-let isRobot=true;
-let playerSign="X";
-let enemySign="O";
-let playerEnemy="Robot"
-
-function createToggleFunction(element1,element2, color1, color2, labelText, toggleValue, variableToUpdate ){
-    return function(){  
-        toggleValue = !toggleValue;
-        if(toggleValue){
-            element1.style.backgroundColor = color2;
-            element1.style.color = color1;
-            element2.style.backgroundColor = color1;
-            element2.style.color = color2;
-            labelText.innerHTML = `Pick your ${variableToUpdate}: ${element1.textContent}`;
-            if (variableToUpdate === 'sign') {
-                playerSign = element1.textContent;
-                enemySign = element2.textContent;
-            } else if (variableToUpdate === 'enemy') {
-                playerEnemy = element1.textContent;
-            }
+    function switchColor(element1,element2) {
+        
+        // Activate element 1
+        element1.style.color = black;
+        element1.style.backgroundColor = green;
+        // Deactivate element 2
+        element2.style.color = green;
+        element2.style.backgroundColor = black;
+        if(element1==o){
+            mainPlayer=players.playerO;
+            enemyPlayer=players.playerX;
+        } else if(element1==x){
+            mainPlayer=players.playerX;
+            enemyPlayer=players.playerO;
+        } 
+        else if(element1==robot){
+            isAiMode = true;
         }
-        else {
-            element1.style.backgroundColor=color1;
-            element1.style.color=color2;
-            element2.style.backgroundColor=color2;
-            element2.style.color=color1;
-            labelText.innerHTML = `Pick your ${variableToUpdate}: ${element2.textContent}`;
-            if (variableToUpdate === 'sign') {
-                playerSign = element2.textContent;
-                enemySign = element1.textContent;
-            } else if (variableToUpdate === 'enemy') {
-                playerEnemy = element2.textContent;
-            }
+        else if(element1==human){
+            isAiMode = false;
         }
-        return toggleValue;
-    };
-}
+    }
 
-const toggleSign = createToggleFunction(x, o, color1, color3, pickSign, isX, 'sign');
-const toggleEnemy = createToggleFunction(robot, human, color1, color3, pickEnemy, isRobot, 'enemy');
-x.addEventListener('click', toggleSign);
-o.addEventListener('click', toggleSign);
-robot.addEventListener('click', toggleEnemy);
-human.addEventListener('click', toggleEnemy);
+    x.addEventListener('click', function() {switchColor(x, o); });
+    o.addEventListener('click', function() { switchColor(o, x); });
+    human.addEventListener('click', function() {switchColor(human, robot); });
+    robot.addEventListener('click', function() { switchColor(robot, human); });
+})();
+
+
 
 // After defining the sign and enemy, we are ready to start our game :)
 // With a click of a start button our board game shows off.
 // Technically one section "menu" displayes as none and next section "game" turns on 
+// Same method applied when we return back to the menu section after playing a game
+querySelector('.buttom').addEventListener('click', startGame);
+querySelectorAll('.return').forEach(element =>{element.addEventListener('click', goBack)});
 
-const menu_section=document.querySelector('.menu');
-const game_section=document.querySelector('.game');
-const start=document.querySelector('.buttom');
-const turn=document.querySelector('.turn');
-const result=document.querySelector('.result');
-const winner=document.querySelector('.winner');
-const scoreX=document.querySelector ('.score-displayer-X')
-const scoreO=document.querySelector ('.score-displayer-O')
-const scoreTie=document.querySelector ('.score-displayer-tie')
-const menu=document.querySelectorAll('.return');
-const play=document.querySelector('.play');
-
-
-function startGame(){
-    menu_section.style.display = "none";
-    game_section.style.display ="grid";
-    reset();
-    // turn.innerHTML="Turn: "+ players[0].sign;
-    // if(playerSign=="O"){turn.innerHTML="Turn: X";}
-    // else if(playerSign=="X") {turn.innerHTML="Turn: X";}
+function startGame() {
+    querySelector('.menu_section').style.display = "none";
+    querySelector('.game_section').style.display = "grid";
+    querySelector('.game_section').style.filter="blur(0px)";
 }
-start.addEventListener('click', startGame);
 
-menu.forEach(menu => {
-    menu.addEventListener('click', () =>{
-        menu_section.style.display = "grid";
-        game_section.style.display ="none";
-        result.style.display="none";
-        game_section.style.filter="blur(0px)";
-        reset();
-    })
-  });
+function goBack(){
+    querySelector('.menu_section').style.display = "grid";
+    querySelector('.game_section').style.display = "none";
+    querySelector('.result_section').style.display="none";
+    querySelector('.game_section').style.filter="blur(0px)";
+    gameController.startNewGame()
+}
 
-play.addEventListener('click', () =>{
-    result.style.display="none";
-    game_section.style.filter="blur(0px)";
-    reset();
-})
+// Game
 
-let players= [
-    {
-        name:"Player X",
-        sign: "X",
-        score: 0,
-        position:[],
-        winner: false,
-        color: color4,
-        round:1   
-    },
-    {
-        name: "Player O",
-        sign: "O",
-        score: 0,
-        position:[],
-        winner: false,
-        color: color3,
-        round:1      
+const players =(()=>{
+    function player(sign,color,score,position,winner) {
+        this.sign = sign;
+        this.color = color;
+        this.score = score;
+        this.position = position;
+        this.winner = winner;
     }
-];
+    const playerX = new player("X", yellow,0, [], false);
+    const playerO = new player("O", green, 0, [], false);
+    const insertMove= (index) =>{
+        activePlayer.position.push(index);
+    }
+    const giveScore= () =>{
+        activePlayer.score++;
+    }
+    const resetPlayersPosition= () =>{
+        playerX.position=[];
+        playerO.position=[];
+    }
+    const resetPlayersScore= () =>{
+        playerX.score=0;
+        playerO.score=0;
+    }
+    const resetPlayersWin= () =>{
+        playerX.winner=false;
+        playerO.winner=false;
+    }
 
-let activePlayer=players[0];
-let tie=0;
+    return {playerX, playerO, insertMove, giveScore,resetPlayersPosition,resetPlayersScore,resetPlayersWin}
+})();
 
-const board=document.querySelectorAll('.board_field');
-var board_array = [...board];
-let area = [
-    "", "", "",
-    "","","", 
-    "","", ""
-];
+let gameBoard = ["", "", "","","","", "","", ""],
+    mainPlayer=players.playerX,
+    enemyPlayer=players.playerO;
 
-board_array.forEach((div,index) => {
-    div.addEventListener('mousemove', () =>{
-        if (area[index] == "" && activePlayer.winner==false) {
-            div.innerHTML=activePlayer.sign;
-            div.style.color=color1;
-            div.style.webkitTextStrokeColor=activePlayer.color;
-            div.style.border = `solid 1px ${activePlayer.color}`;
-            // -webkit-text-stroke-color=activePlayer.color;
+const board =(()=>{
+    
+    const insertMove = (element,index) => {
+        if(gameBoard[index]==""){
+        gameBoard[index] = activePlayer.sign;
+        element.innerHTML=activePlayer.sign;
         }
-    });
-    div.addEventListener('mouseleave', () =>{
-        if (area[index] == "" && activePlayer.winner==false) {
-            div.innerHTML='';
-            div.style.border = `solid 1px ${color5}`;
+    };
+    const boardNewRound=()=> {
+        gameBoard=["", "", "","","","", "","", ""];
+        querySelectorAll('.board_field').forEach(element => {
+            element.style.backgroundColor = black;
+            element.innerHTML = "";
+        });
+    }
+    const boardStyleHover = (element, index) => {
+        if(gameBoard[index]==""){
+        element.innerHTML=activePlayer.sign;
+        element.style.border = `solid 1px ${activePlayer.color}`;
+        element.style.color=black;
+        element.style.webkitTextStrokeColor=activePlayer.color;
         }
-    });
-    div.addEventListener('click', () =>{
-        if (area[index] == "" && activePlayer.winner==false) {
-            div.innerHTML=activePlayer.sign;
-            div.style.color=activePlayer.color;
-            div.style.border = `solid 1px ${color5}`;
-            div.style.trans
-            activePlayer.position.push(index);
-            activePlayer.position.sort();
-            area[index] = activePlayer.sign;  
-            checkRoundwinner();
-            announceFinalwinner();
-            switchPlayerTurn();  
-            turnSign();
+    };
+    const boardStyleNotHover = (element, index) => {
+        if(gameBoard[index]==""){
+        element.style.border = `solid 1px #A4C2A8`;
+        element.innerHTML="";
         }
-    });
-});
+    };
+    const boardStyleClicked = (element, index) => {
+        if (gameBoard[index] == "") {
+        players.insertMove(index);
+        insertMove(element,index);
+        element.style.border = `solid 1px #A4C2A8`;
+        element.style.color=activePlayer.color;
+        }
+    };
+    const boardStyleWon = (index) => {
+        querySelectorAll('.board_field')[index].style.backgroundColor = activePlayer.color;
+        querySelectorAll('.board_field')[index].style.color = black;
+        querySelectorAll('.board_field')[index].style.webkitTextStrokeColor=black;   
+    };
 
-const switchPlayerTurn = () => {
-    activePlayer = activePlayer === players[0] ? players[1] : players[0];
-};
+    return {gameBoard, boardNewRound, insertMove, 
+        boardStyleHover, boardStyleNotHover, boardStyleClicked, boardStyleWon 
+    }
+})();
+let tie=0
+const game =(()=>{
+    
+    const resetTie= () =>{
+        tie=0
+    }       
+    const changeScoreDisplayer= () =>{
+        querySelector ('.score-displayer-tie').innerHTML=tie;
+        querySelector ('.score-displayer-X').innerHTML=players.playerX.score;
+        querySelector ('.score-displayer-O').innerHTML=players.playerO.score;
+    }
+    const announceFinalwinner= () =>{
+        querySelector('.game_section').style.filter="blur(4px)";
+        querySelector('.result_section').style.display="flex";
+        querySelector('.winner').innerHTML=`${activePlayer.sign} is a winner`;
+    }
 
+    return {  resetTie,changeScoreDisplayer, announceFinalwinner }
+})();
 
-let combo=[];
+let activePlayer=players.playerX;
 
-function checkRoundwinner(){
+const gameController = (() => {
+    let roundOver = false;
+    let gameOver = false;
+    let winnerFound = false;
+    let clickEnabled = Array.from({ length: 9 }, () => true);
     const winningCombinations = [
-        [0, 1, 2], // 012
-        [3, 4, 5], // 345
-        [6, 7, 8], // 678
-        [0, 3, 6], // 036
-        [1, 4, 7], // 147
-        [2, 5, 8], // 258
-        [0, 4, 8], // 048
-        [2, 4, 6]  // 246
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
     ];
-    let isSubset = (array1, array2) =>
-    array2.every((element) => array1.includes(element));
 
-    let index=0;
-    for (let i= 0; i < winningCombinations.length;i++) 
-    {
-        if(isSubset(activePlayer.position, winningCombinations[index])==false){
-            index++;
+    const showActivePlayerSign = () => {
+        querySelector('.turn').innerHTML = `Turn ${activePlayer.sign}`;
+        if (roundOver == true) {
+            game.changeScoreDisplayer();
+            if (winnerFound == true) {
+                querySelector('.turn').innerHTML = `${activePlayer.sign} won`;
+            } else {
+                querySelector('.turn').innerHTML = `It is a tie`;
+            }
         }
-        else if (isSubset(activePlayer.position, winningCombinations[index])==true) {
-            
-            combo=winningCombinations[index];
-            for (const index of combo) {
-                board_array[index].style.backgroundColor = activePlayer.color;
-                board_array[index].style.color = color1;
-            }             
-            activePlayer.score++; 
-           
-            if(activePlayer.score==3){
-                announceFinalwinner()
+    }
+    showActivePlayerSign();  
+
+    const switchPlayerTurn = () => {
+        return activePlayer = activePlayer === players.playerX ? players.playerO : players.playerX;
+    };
+    
+    function checkRoundwinner() {
+        const isSubset = (array1, array2) =>
+            array2.every((element) => array1.includes(element));
+        for (let i = 0; i < winningCombinations.length; i++) {
+            if (isSubset(activePlayer.position, winningCombinations[i])) {
+                returnWinner(i);
+                roundOver = true;
+                winnerFound = true;
+                break; // Exit the loop when a winning combination is found
             }
-            else{
-                setTimeout(() => {
-                    activePlayer=players[0];
-                    turnSign();
-                    changeScore();
-                    resetBoard();
-                    
-                }, 1000);
-                  
-            }
-            return combo;   
-        }  
-    } ;
-    if (area.indexOf("") === -1) {
+        }
+        if (gameBoard.indexOf("") === -1) {
+            returnTie();
+            roundOver = true;
+            winnerFound = false;
+        }
+        if(roundOver){
+            startNewRound();
+        }
+    }
+
+    function startNewRound(){
+        setTimeout(() => {
+           players.resetPlayersPosition();
+           players.resetPlayersWin(); 
+           board.boardNewRound();
+           activePlayer=players.playerX;
+           roundOver = false;
+           winnerFound = false;
+           showActivePlayerSign();
+           clickEnabled = Array.from({ length: 9 }, () => true);
+        },500)
+    }
+
+    function startNewGame(){
+        players.resetPlayersScore();
+        game.changeScoreDisplayer();
+        game.resetTie();
+        players.resetPlayersPosition();
+        players.resetPlayersWin(); 
+        board.boardNewRound();
+        activePlayer=players.playerX;
+        roundOver = false;
+        winnerFound = false;
+        showActivePlayerSign();
+        clickEnabled = Array.from({ length: 9 }, () => true);
+    }
+
+    function returnWinner(index) {
+        const combo = winningCombinations[index];
+        for (const positionIndex of combo) {
+            board.boardStyleWon(positionIndex);
+        }
+        players.giveScore();
+        game.changeScoreDisplayer();
+    }
+
+    function returnTie() {
         tie++;
-        activePlayer=players[0];
-        changeScore();
-        resetBoard();
-        switchPlayerTurn();  
     }
-};
-
-function announceFinalwinner(){  
-    if(activePlayer.score==3 ){
-        for (const index of combo) {
-            board_array[index].style.backgroundColor = activePlayer.color;
-            board_array[index].style.color = color1;
-        }               
-        game_section.style.filter="blur(4px)";
-        result.style.display="flex";
-
-        if(activePlayer.sign==playerSign){
-            winner.innerHTML="You are a winner";
-            activePlayer.score++;
-        }
-        else if(activePlayer.sign !== playerSign){
-            winner.innerHTML="You lost";
-            activePlayer.score++;
+    function finishGame(){
+        if(activePlayer.score==3){
+            gameOver=true;
+            game.announceFinalwinner();
+            startNewGame();
         }
     }
-
-}
     
-function turnSign(){
-    turn.innerHTML='Turn: '+ activePlayer.sign;
-}
-
-function changeScore(){
-    scoreTie.innerHTML=tie;
-    scoreX.innerHTML=players[0].score;
-    scoreO.innerHTML=players[1].score;
-}
-changeScore()
-    
-function reset(){
-    board_array.forEach((div, index) => {
-        div.innerHTML = ''; 
-        board_array[index].style.backgroundColor =color1;
+    querySelectorAll('.board_field').forEach((element, index) => {
+        element.addEventListener('mousemove', () => {
+            board.boardStyleHover(element, index);
         });
-
-    area = [
-        "", "", "",
-        "","","", 
-        "","", ""
-    ];
-
-    players.forEach((player) => {
-        player.position = [];
-        player.winner = false;
-        player.score = 0;
+        element.addEventListener('mouseleave', () => {
+            board.boardStyleNotHover(element, index);
         });
-    tie=0;
-    activePlayer=players[0];
-    turnSign();
-    changeScore();
-}
-
-
-function resetBoard(){
-    activePlayer=players[0];
-    board_array.forEach((div, index) => {
-        div.innerHTML = ''; 
-        board_array[index].style.backgroundColor =color1;
+        element.addEventListener('click', () => {
+            if(!isAiMode && clickEnabled[index]){
+                clickEnabled[index] = false;
+                board.boardStyleClicked(element, index);
+                checkRoundwinner();
+                if(!roundOver){switchPlayerTurn()};
+                showActivePlayerSign();  
+                finishGame();
+            }
+            
         });
-
-    area = [
-        "", "", "",
-        "","","", 
-        "","", ""
-    ];
-    players.forEach((player) => {
-        player.position = [];
+       
     });
-    activePlayer=players[0];
-}
+
+    querySelector('.play').addEventListener('click', () => {
+        startNewGame();
+        querySelector('.game_section').style.filter="blur(0px)";
+        querySelector('.result_section').style.display="none";
+ 
+    });
 
 
-
-
-
-
-
-
+return{startNewGame}
+})();

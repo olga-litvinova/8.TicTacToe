@@ -14,12 +14,12 @@
 /* Section 1 - Menu */
 
 
-.menu{
-    display: none;
+.menu_section{
+    /* display: none; */
     background-color: var(--color1);
     width: 100vw;
     height: 100vh;
-    /* display: grid; */
+    display: grid;
     grid-template-rows: 1fr 2fr 1fr;
     grid-template-columns: 1fr 2fr 1fr;
 }
@@ -31,6 +31,10 @@
     text-align: center;
     margin-top: 70px;
     font-family: 'Righteous', cursive;
+}
+
+.header span{
+    color: var(--color4);
 }
 
 .middle{
@@ -65,14 +69,14 @@
     margin-top: 15px;
 }
 
-.middle .sign .x, .middle .enemy .robot{
+.middle .sign .x, .middle .enemy .human{
     height: 80%;
     background-color: var(--color3);
     color: var(--color1);
     /* text-shadow: 0 0 10px var(--color4); */
 }
 
-.middle .sign .o, .middle .enemy .human{
+.middle .sign .o, .middle .enemy .robot{
     height: 80%;
     color: var(--color3);
 }
@@ -95,12 +99,12 @@
 
 /* Section 2 - Game*/
 
-.game{
-    /* display: none; */
+.game_section{
+    display: none;
     background-color: var(--color1);
     width: 100vw;
     height: 100vh;
-    display: grid;
+    /* display: grid; */
     grid-template-rows: 1fr 2fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     box-sizing: border-box;
@@ -110,39 +114,39 @@
      
 }
 
-.game .header{
+.game_section .header{
     display: flex;
     justify-content: space-between;
     margin-top: 30px;
     gap: 5vw;
 }
 
-.game .header>div{
+.game_section .header>div{
    width: 15vw; 
 }
 
 
-.game .header .logo{
+.game_section .header .logo{
     padding: 10px 0;
     font-size: 0.6rem;
     color: var(--color5);
 }
 
-.game .header .turn{
+.game_section .header .turn{
     text-align: center;
     font-size: 0.6rem;
     padding: 10px 0;
 }
 
 
-.game .header .return img{
+.game_section .header .return img{
     background-color: var(--color5);
     align-content: center;
     padding: 10px 15px;
     border-radius: 5px;
 }
 
-.game .board{
+.game_section .board{
     grid-area: 2/2/3/3;
     display: flex;
     flex-wrap: wrap;
@@ -153,7 +157,7 @@
     height: 25vw;
 }
 
-.game .board >div{
+.game_section .board >div{
     width: calc(30% - 10px);
     height: calc(30% - 10px);
     background-color: var(--color2);
@@ -172,7 +176,7 @@
 }
 
 
-.game .buttom{
+.game_section .buttom{
     grid-area: 3/1/4/4;
     display: flex;
     justify-content: center;
@@ -180,7 +184,7 @@
     font-family: 'Righteous', cursive;
 }
 
-.game .buttom .summary{
+.game_section .buttom .summary{
     font-size: 0.6rem;
     margin-top: 40px;
     width: 10vw;
@@ -188,27 +192,27 @@
     text-align: center;
     padding: 5px 0;
 }
-.game .buttom .summary p{
+.game_section .buttom .summary p{
     font-size: 0.3rem;
 }
 
-.game .summary.first{
+.game_section .summary.first{
     background-color: var(--color4);
     margin: auto 0;
 }
 
-.game .summary.second{
+.game_section .summary.second{
     background-color: var(--color5);
     margin: auto 0;
     }
 
 
-.game .summary.third{
+.game_section .summary.third{
     background-color: var(--color3);
     margin: auto 0;
     }
 
-.result{
+.result_section{
     display: none;
     position: absolute;
     top:30vh;
@@ -228,7 +232,7 @@
     flex: 1;
 }
 
-.result h1{
+.result_section h1{
     flex-grow: 2;
     display: flex;
     align-items: center;
@@ -236,7 +240,7 @@
     /* margin: 10% 5%; */
 }
 
-.result .button{
+.result_section .button{
     flex-grow: 1;
     position: relative;
     /* margin-top: 20%; */
@@ -246,7 +250,7 @@
     justify-content: space-around;
 }
 
-.result .button>div{
+.result_section .button>div{
     text-align: center;
     height: 10vh;
     width: 15vw;
@@ -258,12 +262,12 @@
 }
 
 
-.result .button .play{
+.result_section .button .play{
     background-color: var(--color3);
     color: var(--color1);
 }
 
-.result .button .return{
+.result_section .button .return{
     background-color: var(--color5);
     color: var(--color1);
 }
